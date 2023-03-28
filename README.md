@@ -30,10 +30,7 @@ The recommended timeline for the whole module is 2 weeks.
 
 #### Prerequisites
 
-As in previous modules, you are provided with the basic interface for `controller` layer:
-- `com.mjc.school.controller.BaseController`
-
-Use it as base point for your solution.
+Your **ORM** solution. Do not delete or move basic interfaces. 
 
 You may create your own REST controller interfaces on the base of the BaseController interface.
 
