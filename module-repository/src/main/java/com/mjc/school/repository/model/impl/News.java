@@ -28,11 +28,14 @@ public class News implements BaseEntity<Long> {
 
     @ManyToMany
     @JoinTable(
-            name = "newsid-tagid",
-            joinColumns = {@JoinColumn(name = "newsId")},
-            inverseJoinColumns = {@JoinColumn(name = "tagId")}
+            name = "news_tag",
+            joinColumns = {@JoinColumn(name = "news_id")},
+            inverseJoinColumns = {@JoinColumn(name = "tag_id")}
     )
     private List<Tag> tags;
+
+    @OneToMany(mappedBy = "newsId", cascade = CascadeType.REMOVE)
+    private List<Comment> comments;
 
     @Override
     public Long getId() {

@@ -5,6 +5,7 @@ import com.mjc.school.repository.NewsCommands;
 import com.mjc.school.repository.model.impl.Author;
 import com.mjc.school.repository.model.impl.News;
 import com.mjc.school.repository.model.impl.Tag;
+import com.mjc.school.repository.query.NewsSearchQueryParams;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -13,11 +14,12 @@ import javax.persistence.PersistenceUnit;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class NewsRepository implements BaseRepository<News, Long>, NewsCommands<News, Long> {
+public class NewsRepository implements BaseRepository<News, Long>, NewsCommands {
 
 
     private EntityManager entityManager;
@@ -80,52 +82,39 @@ public class NewsRepository implements BaseRepository<News, Long>, NewsCommands<
     }
 
     @Override
-    public List<News> readByTagName(String tagName) {
+    public List<News> readBySearchParams(NewsSearchQueryParams searchQueryParams) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<News> criteriaQuery = criteriaBuilder.createQuery(News.class);
-        Root<News> news = criteriaQuery.from(News.class);
-        Join<News, Tag> newsJoin = news.join("tags", JoinType.LEFT);
-        criteriaQuery.where(criteriaBuilder.equal(newsJoin.get("name"), tagName));
-        return entityManager.createQuery(criteriaQuery).getResultList();
+        CriteriaQuery<News> query = criteriaBuilder.createQuery(News.class);
+        Root<News> root = query.from(News.class);
+
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (searchQueryParams.tagNames() != null || searchQueryParams.tagIds() != null) {
+            Join<Tag, News> newsTags = root.join("tags");
+            if (searchQueryParams.tagNames() != null) {
+                predicates.add(newsTags.get("name").in(searchQueryParams.tagNames()));
+            }
+            if (searchQueryParams.tagIds() != null) {
+                predicates.add(newsTags.get("id").in(searchQueryParams.tagIds()));
+            }
+        }
+
+        if (searchQueryParams.authorName() != null) {
+            Join<Author, News> newsAuthor = root.join("author");
+            predicates.add(criteriaBuilder.equal(newsAuthor.get("name"), searchQueryParams.authorName()));
+        }
+
+        if (searchQueryParams.content() != null) {
+            predicates.add(criteriaBuilder.like(root.get("content"), "%" + searchQueryParams.content() + "%"));
+        }
+
+        if (searchQueryParams.title() != null) {
+            predicates.add(criteriaBuilder.like(root.get("title"), "%" + searchQueryParams.title() + "%"));
+        }
+
+        query.select(root).distinct(true).where(predicates.toArray(new Predicate[0]));
+
+        return entityManager.createQuery(query).getResultList();
     }
 
-    @Override
-    public List<News> readByTagId(Long tagId) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<News> criteriaQuery = criteriaBuilder.createQuery(News.class);
-        Root<News> news = criteriaQuery.from(News.class);
-        Join<News, Tag> newsJoin = news.join("tags", JoinType.LEFT);
-        criteriaQuery.where(criteriaBuilder.equal(newsJoin.get("id"), tagId));
-        return entityManager.createQuery(criteriaQuery).getResultList();
-    }
-
-    @Override
-    public List<News> readByAuthorName(String authorName) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<News> criteriaQuery = criteriaBuilder.createQuery(News.class);
-        Root<News> news = criteriaQuery.from(News.class);
-        Join<News, Author> newsJoin = news.join("authors", JoinType.LEFT);
-        criteriaQuery.where(criteriaBuilder.equal(newsJoin.get("name"), authorName));
-        return entityManager.createQuery(criteriaQuery).getResultList();
-    }
-
-    @Override
-    public List<News> readByTitle(String title) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<News> criteriaQuery = criteriaBuilder.createQuery(News.class);
-        Root<News> news = criteriaQuery.from(News.class);
-        criteriaQuery.select(news).where(criteriaBuilder.like(news.get("title"), "%" + title + "%"));
-        List<News> res = entityManager.createQuery(criteriaQuery).getResultList();
-        return res;
-    }
-
-    @Override
-    public List<News> readByContent(String content) {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<News> criteriaQuery = criteriaBuilder.createQuery(News.class);
-        Root<News> news = criteriaQuery.from(News.class);
-        criteriaQuery.select(news).where(criteriaBuilder.like(news.get("content"), "%" + content + "%"));
-        List<News> res = entityManager.createQuery(criteriaQuery).getResultList();
-        return res;
-    }
 }

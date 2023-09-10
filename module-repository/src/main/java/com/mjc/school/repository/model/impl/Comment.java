@@ -4,18 +4,16 @@ import com.mjc.school.repository.model.BaseEntity;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
-@Entity
-@Table(name = "author")
-public class Author implements BaseEntity<Long> {
+@Entity(name = "comment")
+public class Comment implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "AUTHOR_ID")
+    @Column(name = "author_id")
     private Long id;
 
-    private String name;
+    private String content;
 
     @Column(name = "create_date")
     private LocalDateTime createdDate;
@@ -23,25 +21,16 @@ public class Author implements BaseEntity<Long> {
     @Column(name = "last_update_date")
     private LocalDateTime lastUpdatedDate;
 
-    @OneToMany(mappedBy = "authorId", cascade = CascadeType.REMOVE)
-    private List<News> news;
+    @ManyToOne
+    @JoinColumn(name = "comments")
+    private News newsId;
 
-    @Override
-    public Long getId() {
-        return id;
+    public String getContent() {
+        return content;
     }
 
-    @Override
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setContent(String content) {
+        this.content = content;
     }
 
     public LocalDateTime getCreatedDate() {
@@ -58,5 +47,15 @@ public class Author implements BaseEntity<Long> {
 
     public void setLastUpdatedDate(LocalDateTime lastUpdatedDate) {
         this.lastUpdatedDate = lastUpdatedDate;
+    }
+
+    @Override
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(Long id) {
+        this.id = id;
     }
 }

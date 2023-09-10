@@ -19,7 +19,7 @@ subprojects {
     }
 
     dependencies {
-// https://mvnrepository.com/artifact/com.h2database/h2
+        // https://mvnrepository.com/artifact/com.h2database/h2
         implementation 'com.h2database:h2:2.2.220'
         testImplementation 'com.h2database:h2:2.2.220'
         implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'

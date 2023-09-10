@@ -1,7 +1,6 @@
 package com.mjc.school.repository.model.impl;
 
 import com.mjc.school.repository.model.BaseEntity;
-import com.mjc.school.repository.model.impl.News;
 
 import javax.persistence.*;
 import java.util.List;

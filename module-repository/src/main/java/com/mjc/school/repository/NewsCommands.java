@@ -1,17 +1,12 @@
 package com.mjc.school.repository;
 
-
+import com.mjc.school.repository.model.impl.News;
+import com.mjc.school.repository.query.NewsSearchQueryParams;
 
 import java.util.List;
 
-public interface NewsCommands<T, K> {
-    List<T> readByTagName(String tagName);
+public interface NewsCommands extends BaseRepository<News, Long> {
 
-    List<T> readByTagId(K tagId);
-
-    List<T> readByAuthorName(String authorName);
-
-    List<T> readByTitle(String title);
-
-    List<T> readByContent(String content);
+    List<News> readBySearchParams(NewsSearchQueryParams searchQueryParams);
 }
+

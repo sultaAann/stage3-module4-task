@@ -4,6 +4,7 @@ import com.mjc.school.repository.BaseRepository;
 import com.mjc.school.repository.NewsCommands;
 import com.mjc.school.repository.model.impl.Author;
 import com.mjc.school.repository.model.impl.News;
+import com.mjc.school.repository.query.NewsSearchQueryParams;
 import com.mjc.school.service.BaseService;
 import com.mjc.school.service.NewsCommandsService;
 import com.mjc.school.service.dto.NewsDTORequest;
@@ -11,6 +12,7 @@ import com.mjc.school.service.dto.NewsDTOResponse;
 import com.mjc.school.service.exceptions.NewsIDException;
 import com.mjc.school.service.exceptions.TitleOrContentLengthException;
 import com.mjc.school.service.mapper.NewsMapper;
+import com.mjc.school.service.query.NewsQueryParams;
 import com.mjc.school.service.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,17 +20,15 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class NewsService implements BaseService<NewsDTORequest, NewsDTOResponse, Long>, NewsCommandsService<NewsDTOResponse, Long> {
+public class NewsService implements BaseService<NewsDTORequest, NewsDTOResponse, Long>, NewsCommandsService {
     @Autowired
-    private NewsCommands<News, Long> newsCommands;
+    private NewsCommands newsCommands;
     @Autowired
     private BaseRepository<News, Long> repository;
 
     @Override
     public List<NewsDTOResponse> readAll() {
-        return repository.readAll().stream()
-                .map(NewsMapper.INSTANCE::modelToDto)
-                .toList();
+        return repository.readAll().stream().map(NewsMapper.INSTANCE::modelToDto).toList();
     }
 
     @Override
@@ -73,38 +73,16 @@ public class NewsService implements BaseService<NewsDTORequest, NewsDTOResponse,
         return repository.deleteById(id);
     }
 
-    @Override
-    public List<NewsDTOResponse> readByTagName(String tagName) {
-        return newsCommands.readByTagName(tagName).stream()
-                .map(NewsMapper.INSTANCE::modelToDto)
-                .toList();
-    }
 
     @Override
-    public List<NewsDTOResponse> readByTagId(Long tagId) {
-        return newsCommands.readByTagId(tagId).stream()
-                .map(NewsMapper.INSTANCE::modelToDto)
-                .toList();
-    }
-
-    @Override
-    public List<NewsDTOResponse> readByAuthorName(String authorName) {
-        return newsCommands.readByAuthorName(authorName).stream()
-                .map(NewsMapper.INSTANCE::modelToDto)
-                .toList();
-    }
-
-    @Override
-    public List<NewsDTOResponse> readByTitle(String title) {
-        return newsCommands.readByTitle(title).stream()
-                .map(NewsMapper.INSTANCE::modelToDto)
-                .toList();
-    }
-
-    @Override
-    public List<NewsDTOResponse> readByContent(String content) {
-        return newsCommands.readByContent(content).stream()
-                .map(NewsMapper.INSTANCE::modelToDto)
-                .toList();
+    public List<NewsDTOResponse> readBySearchParams(NewsQueryParams queryParams) {
+        NewsSearchQueryParams searchQueryParams = new NewsSearchQueryParams(
+                queryParams.tagNames(),
+                queryParams.tagIds(),
+                queryParams.authorName(),
+                queryParams.title(),
+                queryParams.content()
+        );
+        return newsCommands.readBySearchParams(searchQueryParams).stream().map(NewsMapper.INSTANCE::modelToDto).toList();
     }
 }
