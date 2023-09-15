@@ -5,14 +5,13 @@ import com.mjc.school.repository.model.BaseEntity;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
-
 @Entity
-@Table(name = "author")
+@Table(name = "authors")
 public class Author implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "AUTHOR_ID")
+    @Column(name = "author_id")
     private Long id;
 
     private String name;
@@ -25,7 +24,6 @@ public class Author implements BaseEntity<Long> {
 
     @OneToMany(mappedBy = "authorId", cascade = CascadeType.REMOVE)
     private List<News> news;
-
     @Override
     public Long getId() {
         return id;

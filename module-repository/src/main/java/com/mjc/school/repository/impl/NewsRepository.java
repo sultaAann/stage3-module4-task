@@ -6,12 +6,10 @@ import com.mjc.school.repository.model.impl.Author;
 import com.mjc.school.repository.model.impl.News;
 import com.mjc.school.repository.model.impl.Tag;
 import com.mjc.school.repository.query.NewsSearchQueryParams;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceUnit;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.persistence.criteria.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,11 +22,10 @@ public class NewsRepository implements BaseRepository<News, Long>, NewsCommands 
 
     private EntityManager entityManager;
 
-    @PersistenceUnit
+    @Autowired
     public void setEntityManager(EntityManagerFactory entityManagerFactory) {
         this.entityManager = entityManagerFactory.createEntityManager();
     }
-
     @Override
     public List<News> readAll() {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();

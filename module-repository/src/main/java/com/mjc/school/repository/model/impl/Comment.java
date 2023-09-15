@@ -5,7 +5,7 @@ import com.mjc.school.repository.model.BaseEntity;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity(name = "comment")
+@Entity(name = "comments")
 public class Comment implements BaseEntity<Long> {
 
     @Id

@@ -61,7 +61,7 @@ public class TagService implements BaseService<TagDTORequest, TagDTOResponse, Lo
     }
 
     @Override
-    public boolean deleteById(Long id) throws AuthorIDException, TagIDException {
+    public boolean deleteById(Long id) throws TagIDException {
         Validator.tagIdValidator(String.valueOf(id));
         return repository.deleteById(id);
     }

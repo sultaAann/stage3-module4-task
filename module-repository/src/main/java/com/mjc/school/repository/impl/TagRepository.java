@@ -4,10 +4,12 @@ import com.mjc.school.repository.BaseRepository;
 import com.mjc.school.repository.TagCommands;
 import com.mjc.school.repository.model.impl.News;
 import com.mjc.school.repository.model.impl.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceUnit;
 import javax.persistence.criteria.*;
 import java.util.List;
@@ -18,11 +20,10 @@ public class TagRepository implements BaseRepository<Tag, Long>, TagCommands<Tag
 
     private EntityManager entityManager;
 
-    @PersistenceUnit
+    @Autowired
     public void setEntityManager(EntityManagerFactory entityManagerFactory) {
         this.entityManager = entityManagerFactory.createEntityManager();
     }
-
     @Override
     public List<Tag> readAll() {
         return entityManager.createQuery("select a from Tag a").getResultList();
