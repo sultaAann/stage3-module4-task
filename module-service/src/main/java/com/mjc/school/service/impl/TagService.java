@@ -22,10 +22,7 @@ import java.util.List;
 public class TagService implements BaseService<TagDTORequest, TagDTOResponse, Long>, TagCommandsService<TagDTOResponse, Long> {
 
     @Autowired
-    private BaseRepository<Tag, Long> repository;
-
-    @Autowired
-    private TagCommands<Tag, Long> tagCommands;
+    private TagCommands repository;
 
     @Override
     public List<TagDTOResponse> readAll() {
@@ -68,7 +65,7 @@ public class TagService implements BaseService<TagDTORequest, TagDTOResponse, Lo
 
     @Override
     public List<TagDTOResponse> readTagsByNewsId(Long id) {
-        return tagCommands.readTagsByNewsId(id).stream()
+        return repository.readTagsByNewsId(id).stream()
                 .map(TagMapper.INSTANCE::modelToDto)
                 .toList();
     }

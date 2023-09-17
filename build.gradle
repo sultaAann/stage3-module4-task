@@ -31,17 +31,14 @@ subprojects {
         // https://mvnrepository.com/artifact/mysql/mysql-connector-java
         implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.30'
 
+        // Spring Test
+        testImplementation 'org.springframework.boot:spring-boot-starter-test:2.7.7'
 
-        testImplementation "org.springframework:spring-test:$springVersion"
-        testImplementation "org.junit.jupiter:junit-jupiter-api:$jupiterVersion"
         testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$jupiterVersion"
         testImplementation "com.tngtech.archunit:archunit-junit5:$archUnitVersion"
 
         annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
         implementation "org.mapstruct:mapstruct:$mapstructVersion"
-
-        testImplementation 'org.assertj:assertj-core:3.24.2'
-
     }
     test {
         useJUnitPlatform()

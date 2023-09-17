@@ -2,7 +2,6 @@ package com.mjc.school.repository.impl;
 
 
 import com.mjc.school.repository.AuthorCommands;
-import com.mjc.school.repository.BaseRepository;
 import com.mjc.school.repository.model.impl.Author;
 import com.mjc.school.repository.model.impl.News;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class AuthorRepository implements BaseRepository<Author, Long>, AuthorCommands<Author, Long> {
+public class AuthorRepository implements AuthorCommands {
 
     private EntityManager entityManager;
 

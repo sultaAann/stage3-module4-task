@@ -19,5 +19,4 @@ public interface BaseRepository<T extends BaseEntity<K>, K> {
 
     boolean existById(K id);
 
-
 }
