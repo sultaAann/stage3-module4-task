@@ -13,12 +13,8 @@ import java.util.List;
 
 @Service
 public class AuthorService implements AuthorCommandsService {
-    private final AuthorCommands authorCommands;
-
     @Autowired
-    public AuthorService(AuthorCommands authorCommands) {
-        this.authorCommands = authorCommands;
-    }
+    private AuthorCommands authorCommands;
 
     @Override
     public List<AuthorDTOResponse> readAll() {

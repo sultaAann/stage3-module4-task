@@ -13,12 +13,8 @@ import java.util.List;
 
 @Service
 public class TagService implements TagCommandsService {
-    private final TagCommands repository;
-
     @Autowired
-    public TagService(TagCommands repository) {
-        this.repository = repository;
-    }
+    private TagCommands repository;
 
     @Override
     public List<TagDTOResponse> readAll() {

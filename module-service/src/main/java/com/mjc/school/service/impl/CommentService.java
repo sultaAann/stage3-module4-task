@@ -13,12 +13,8 @@ import java.util.List;
 
 @Service
 public class CommentService implements CommentCommandsService {
-    private final CommentCommands repository;
-
     @Autowired
-    public CommentService(CommentCommands repository) {
-        this.repository = repository;
-    }
+    private CommentCommands repository;
 
     @Override
     public List<CommentDTOResponse> readAll() {
@@ -54,6 +50,6 @@ public class CommentService implements CommentCommandsService {
 
     @Override
     public List<CommentDTOResponse> readCommentsByNewsId(Long id) {
-        return null;
+        return repository.readCommentsByNewsId(id).stream().map(CommentMapper.INSTANCE::modelToDto).toList();
     }
 }

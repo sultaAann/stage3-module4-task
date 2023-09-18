@@ -16,12 +16,8 @@ import java.util.List;
 
 @Service
 public class NewsService implements NewsCommandsService {
-    private final NewsCommands repository;
-
     @Autowired
-    public NewsService(NewsCommands repository) {
-        this.repository = repository;
-    }
+    private NewsCommands repository;
 
     @Override
     public List<NewsDTOResponse> readAll() {
