@@ -1,17 +1,15 @@
 package com.mjc.school.service;
 
-import com.mjc.school.service.exceptions.*;
-
 import java.util.List;
 
 public interface BaseService<T, R, K> {
     List<R> readAll();
 
-    R readById(K id) throws AuthorIDException, NewsIDException, TagIDException;
+    R readById(K id);
 
-    R create(T createRequest) throws AuthorNameException, AuthorIDException, TitleOrContentLengthException, TagNameException;
+    R create(T createRequest);
 
-    R update(T updateRequest) throws AuthorIDException, AuthorNameException, NewsIDException, TitleOrContentLengthException, TagIDException, TagNameException;
+    R update(T updateRequest);
 
-    boolean deleteById(K id) throws AuthorIDException, NewsIDException, TagIDException;
+    boolean deleteById(K id);
 }

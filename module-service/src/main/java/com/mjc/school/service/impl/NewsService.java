@@ -1,30 +1,27 @@
 package com.mjc.school.service.impl;
 
-import com.mjc.school.repository.BaseRepository;
 import com.mjc.school.repository.NewsCommands;
 import com.mjc.school.repository.model.impl.Author;
 import com.mjc.school.repository.model.impl.News;
 import com.mjc.school.repository.query.NewsSearchQueryParams;
-import com.mjc.school.service.BaseService;
 import com.mjc.school.service.NewsCommandsService;
 import com.mjc.school.service.dto.NewsDTORequest;
 import com.mjc.school.service.dto.NewsDTOResponse;
-import com.mjc.school.service.exceptions.NewsIDException;
-import com.mjc.school.service.exceptions.TitleOrContentLengthException;
 import com.mjc.school.service.mapper.NewsMapper;
 import com.mjc.school.service.query.NewsQueryParams;
-import com.mjc.school.service.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class NewsService implements BaseService<NewsDTORequest, NewsDTOResponse, Long>, NewsCommandsService {
+public class NewsService implements NewsCommandsService {
+    private final NewsCommands repository;
+
     @Autowired
-    private NewsCommands newsCommands;
-    @Autowired
-    private BaseRepository<News, Long> repository;
+    public NewsService(NewsCommands repository) {
+        this.repository = repository;
+    }
 
     @Override
     public List<NewsDTOResponse> readAll() {
@@ -32,8 +29,7 @@ public class NewsService implements BaseService<NewsDTORequest, NewsDTOResponse,
     }
 
     @Override
-    public NewsDTOResponse readById(Long id) throws NewsIDException {
-        Validator.newsIdValidator(String.valueOf(id));
+    public NewsDTOResponse readById(Long id) {
         if (repository.readById(id).isPresent()) {
             return NewsMapper.INSTANCE.modelToDto(repository.readById(id).get());
         }
@@ -41,8 +37,7 @@ public class NewsService implements BaseService<NewsDTORequest, NewsDTOResponse,
     }
 
     @Override
-    public NewsDTOResponse create(NewsDTORequest createRequest) throws TitleOrContentLengthException {
-        Validator.titleAndContentValidate(createRequest.title(), createRequest.content());
+    public NewsDTOResponse create(NewsDTORequest createRequest) {
         News model = NewsMapper.INSTANCE.dtoToModel(createRequest);
 
         Author author = new Author();
@@ -54,9 +49,7 @@ public class NewsService implements BaseService<NewsDTORequest, NewsDTOResponse,
     }
 
     @Override
-    public NewsDTOResponse update(NewsDTORequest updateRequest) throws NewsIDException, TitleOrContentLengthException {
-        Validator.newsIdValidator(String.valueOf(updateRequest.id()));
-        Validator.titleAndContentValidate(updateRequest.title(), updateRequest.content());
+    public NewsDTOResponse update(NewsDTORequest updateRequest) {
         News model = NewsMapper.INSTANCE.dtoToModel(updateRequest);
 
         Author author = new Author();
@@ -68,8 +61,7 @@ public class NewsService implements BaseService<NewsDTORequest, NewsDTOResponse,
     }
 
     @Override
-    public boolean deleteById(Long id) throws NewsIDException {
-        Validator.newsIdValidator(String.valueOf(id));
+    public boolean deleteById(Long id) {
         return repository.deleteById(id);
     }
 
@@ -83,6 +75,6 @@ public class NewsService implements BaseService<NewsDTORequest, NewsDTOResponse,
                 queryParams.title(),
                 queryParams.content()
         );
-        return newsCommands.readBySearchParams(searchQueryParams).stream().map(NewsMapper.INSTANCE::modelToDto).toList();
+        return repository.readBySearchParams(searchQueryParams).stream().map(NewsMapper.INSTANCE::modelToDto).toList();
     }
 }

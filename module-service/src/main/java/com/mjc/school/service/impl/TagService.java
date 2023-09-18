@@ -1,39 +1,32 @@
 package com.mjc.school.service.impl;
 
-import com.mjc.school.repository.BaseRepository;
 import com.mjc.school.repository.TagCommands;
 import com.mjc.school.repository.model.impl.Tag;
-import com.mjc.school.service.BaseService;
 import com.mjc.school.service.TagCommandsService;
 import com.mjc.school.service.dto.TagDTORequest;
 import com.mjc.school.service.dto.TagDTOResponse;
-import com.mjc.school.service.exceptions.AuthorIDException;
-import com.mjc.school.service.exceptions.AuthorNameException;
-import com.mjc.school.service.exceptions.TagIDException;
-import com.mjc.school.service.exceptions.TagNameException;
 import com.mjc.school.service.mapper.TagMapper;
-import com.mjc.school.service.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class TagService implements BaseService<TagDTORequest, TagDTOResponse, Long>, TagCommandsService<TagDTOResponse, Long> {
+public class TagService implements TagCommandsService {
+    private final TagCommands repository;
 
     @Autowired
-    private TagCommands repository;
-
-    @Override
-    public List<TagDTOResponse> readAll() {
-        return repository.readAll().stream()
-                .map(TagMapper.INSTANCE::modelToDto)
-                .toList();
+    public TagService(TagCommands repository) {
+        this.repository = repository;
     }
 
     @Override
-    public TagDTOResponse readById(Long id) throws TagIDException {
-        Validator.tagIdValidator(String.valueOf(id));
+    public List<TagDTOResponse> readAll() {
+        return repository.readAll().stream().map(TagMapper.INSTANCE::modelToDto).toList();
+    }
+
+    @Override
+    public TagDTOResponse readById(Long id) {
         if (repository.readById(id).isPresent()) {
             return TagMapper.INSTANCE.modelToDto(repository.readById(id).get());
         }
@@ -41,32 +34,26 @@ public class TagService implements BaseService<TagDTORequest, TagDTOResponse, Lo
     }
 
     @Override
-    public TagDTOResponse create(TagDTORequest createRequest) throws AuthorNameException, TagNameException {
-        Validator.tagNameValidator(createRequest.name());
+    public TagDTOResponse create(TagDTORequest createRequest) {
         Tag model = TagMapper.INSTANCE.dtoToModel(createRequest);
         repository.create(model);
         return TagMapper.INSTANCE.modelToDto(model);
     }
 
     @Override
-    public TagDTOResponse update(TagDTORequest updateRequest) throws AuthorIDException, AuthorNameException, TagIDException, TagNameException {
-        Validator.tagIdValidator(String.valueOf(updateRequest.id()));
-        Validator.tagNameValidator(updateRequest.name());
+    public TagDTOResponse update(TagDTORequest updateRequest) {
         Tag model = TagMapper.INSTANCE.dtoToModel(updateRequest);
         repository.update(model);
         return TagMapper.INSTANCE.modelToDto(model);
     }
 
     @Override
-    public boolean deleteById(Long id) throws TagIDException {
-        Validator.tagIdValidator(String.valueOf(id));
+    public boolean deleteById(Long id) {
         return repository.deleteById(id);
     }
 
     @Override
     public List<TagDTOResponse> readTagsByNewsId(Long id) {
-        return repository.readTagsByNewsId(id).stream()
-                .map(TagMapper.INSTANCE::modelToDto)
-                .toList();
+        return repository.readTagsByNewsId(id).stream().map(TagMapper.INSTANCE::modelToDto).toList();
     }
 }
