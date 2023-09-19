@@ -37,8 +37,9 @@ public class TagService implements TagCommandsService {
     }
 
     @Override
-    public TagDTOResponse update(TagDTORequest updateRequest) {
+    public TagDTOResponse update(Long id, TagDTORequest updateRequest) {
         Tag model = TagMapper.INSTANCE.dtoToModel(updateRequest);
+        model.setId(id);
         repository.update(model);
         return TagMapper.INSTANCE.modelToDto(model);
     }

@@ -45,8 +45,9 @@ public class NewsService implements NewsCommandsService {
     }
 
     @Override
-    public NewsDTOResponse update(NewsDTORequest updateRequest) {
+    public NewsDTOResponse update(Long id, NewsDTORequest updateRequest) {
         News model = NewsMapper.INSTANCE.dtoToModel(updateRequest);
+        model.setId(id);
 
         Author author = new Author();
         author.setId(updateRequest.authorId());

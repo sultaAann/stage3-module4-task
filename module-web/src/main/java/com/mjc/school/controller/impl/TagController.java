@@ -1,10 +1,12 @@
 package com.mjc.school.controller.impl;
 
 import com.mjc.school.controller.TagCommandsController;
+import com.mjc.school.controller.exceptions.ResourceNotFoundException;
 import com.mjc.school.service.TagCommandsService;
 import com.mjc.school.service.dto.TagDTORequest;
 import com.mjc.school.service.dto.TagDTOResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,7 +24,7 @@ public class TagController implements TagCommandsController {
 
     @Override
     @GetMapping("/all")
-    public List<TagDTOResponse> readAll() {
+    public List readAll() {
         return service.readAll();
     }
 
@@ -34,25 +36,29 @@ public class TagController implements TagCommandsController {
 
     @Override
     @PostMapping
+    @ResponseStatus(value = HttpStatus.CREATED)
     public TagDTOResponse create(@RequestBody TagDTORequest createRequest) {
         return service.create(createRequest);
     }
 
     @Override
-    @PutMapping
-    public TagDTOResponse update(@RequestBody TagDTORequest updateRequest) {
-        return service.update(updateRequest);
+    @PutMapping("/{id}")
+    public TagDTOResponse update(@PathVariable Long id, @RequestBody TagDTORequest updateRequest) {
+        return service.update(id, updateRequest);
     }
 
     @Override
     @DeleteMapping("/{id}")
-    public boolean deleteById(@PathVariable Long id) {
-        return service.deleteById(id);
+    @ResponseStatus(value = HttpStatus.NO_CONTENT)
+    public void deleteById(@PathVariable Long id) throws ResourceNotFoundException {
+        if (!service.deleteById(id)) {
+            throw new ResourceNotFoundException("Resource not found with id: " + id);
+        }
     }
 
     @Override
-    @GetMapping("/alla")
-    public List<TagDTOResponse> readTagsByNewsId(Long id) {
+    @GetMapping("/{id}")
+    public List<TagDTOResponse> readTagsByNewsId(@PathVariable Long id) {
         return service.readTagsByNewsId(id);
     }
 }

@@ -37,8 +37,9 @@ public class AuthorService implements AuthorCommandsService {
     }
 
     @Override
-    public AuthorDTOResponse update(AuthorDTORequest updateRequest) {
+    public AuthorDTOResponse update(Long id, AuthorDTORequest updateRequest) {
         Author model = AuthorMapper.INSTANCE.dtoToModel(updateRequest);
+        model.setId(id);
         authorCommands.update(model);
         return AuthorMapper.INSTANCE.modelToDto(model);
     }

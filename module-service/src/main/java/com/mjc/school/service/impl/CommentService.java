@@ -37,8 +37,9 @@ public class CommentService implements CommentCommandsService {
     }
 
     @Override
-    public CommentDTOResponse update(CommentDTORequest updateRequest) {
+    public CommentDTOResponse update(Long id, CommentDTORequest updateRequest) {
         Comment model = CommentMapper.INSTANCE.dtoToModel(updateRequest);
+        model.setId(id);
         repository.update(model);
         return CommentMapper.INSTANCE.modelToDto(model);
     }
