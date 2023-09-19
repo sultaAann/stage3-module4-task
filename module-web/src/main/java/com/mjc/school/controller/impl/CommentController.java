@@ -23,7 +23,7 @@ public class CommentController implements CommentCommandsController {
 
     @Override
     @GetMapping("/all")
-    public List readAll() {
+    public List<CommentDTOResponse> readAll() {
         return service.readAll();
     }
 

@@ -23,7 +23,7 @@ public class NewsController implements NewsCommandsController {
 
     @Override
     @GetMapping("/all")
-    public List readAll() {
+    public List<NewsDTOResponse> readAll() {
         return service.readAll();
     }
 
@@ -36,7 +36,7 @@ public class NewsController implements NewsCommandsController {
     @Override
     @PostMapping()
     @ResponseStatus(value = HttpStatus.CREATED)
-    public NewsDTOResponse create(NewsDTORequest createRequest) {
+    public NewsDTOResponse create(@RequestBody NewsDTORequest createRequest) {
         return service.create(createRequest);
     }
 

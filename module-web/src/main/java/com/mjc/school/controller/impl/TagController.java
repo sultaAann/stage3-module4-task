@@ -24,7 +24,7 @@ public class TagController implements TagCommandsController {
 
     @Override
     @GetMapping("/all")
-    public List readAll() {
+    public List<TagDTOResponse> readAll() {
         return service.readAll();
     }
 

@@ -22,7 +22,7 @@ public class AuthorController implements AuthorCommandsController {
 
     @Override
     @GetMapping("/all")
-    public List readAll() {
+    public List<AuthorDTOResponse> readAll() {
         return service.readAll();
     }
 
