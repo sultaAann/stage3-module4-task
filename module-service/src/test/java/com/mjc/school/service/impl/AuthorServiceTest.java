@@ -77,7 +77,4 @@ class AuthorServiceTest {
         assertTrue(service.deleteById(1L));
     }
 
-    @Test
-    void readAuthorByNewsId() {
-    }
 }

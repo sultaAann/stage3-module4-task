@@ -76,7 +76,4 @@ class CommentServiceTest {
         assertTrue(service.deleteById(1L));
     }
 
-    @Test
-    void readCommentsByNewsId() {
-    }
 }

@@ -84,7 +84,4 @@ class NewsServiceTest {
         assertTrue(service.deleteById(1L));
     }
 
-    @Test
-    void readBySearchParams() {
-    }
 }

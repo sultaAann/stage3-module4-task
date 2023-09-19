@@ -77,7 +77,4 @@ class TagServiceTest {
         assertTrue(service.deleteById(1L));
     }
 
-    @Test
-    void readTagsByNewsId() {
-    }
 }
