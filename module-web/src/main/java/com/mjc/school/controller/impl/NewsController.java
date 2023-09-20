@@ -14,7 +14,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/news")
+@RequestMapping(path = "/news", consumes = {"text/plain", "application/*"})
 public class NewsController implements NewsCommandsController {
     private final NewsCommandsService service;
     @Autowired

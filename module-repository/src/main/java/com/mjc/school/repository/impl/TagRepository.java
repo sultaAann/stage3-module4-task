@@ -43,6 +43,7 @@ public class TagRepository implements TagCommands {
     @Override
     public Tag create(Tag model) {
         entityManager.persist(model);
+        entityManager.flush();
         return model;
     }
 

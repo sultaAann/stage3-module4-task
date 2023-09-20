@@ -39,7 +39,7 @@ public class CommentRepository implements CommentCommands {
 
     @Override
     public Optional<Comment> readById(Long id) {
-        return Optional.ofNullable(entityManager.find(Comment.class, id));
+        return Optional.of(entityManager.find(Comment.class, id));
     }
 
     @Override

@@ -5,12 +5,13 @@ import com.mjc.school.repository.model.BaseEntity;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity(name = "comments")
+@Entity
+@Table(name = "comments")
 public class Comment implements BaseEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "author_id")
+    @Column(name = "comment_id")
     private Long id;
 
     private String content;
@@ -22,7 +23,7 @@ public class Comment implements BaseEntity<Long> {
     private LocalDateTime lastUpdatedDate;
 
     @ManyToOne
-    @JoinColumn(name = "comments")
+    @JoinColumn(name = "news_id")
     private News newsId;
 
     public String getContent() {
