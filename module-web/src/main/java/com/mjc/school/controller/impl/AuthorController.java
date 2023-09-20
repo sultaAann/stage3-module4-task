@@ -22,8 +22,9 @@ public class AuthorController implements AuthorCommandsController {
 
     @Override
     @GetMapping("/all")
-    public List<AuthorDTOResponse> readAll() {
-        return service.readAll();
+    public List<AuthorDTOResponse> readAll( @RequestParam(defaultValue = "10", required = false) int limit,
+                                            @RequestParam(defaultValue = "0", required = false) int offset) {
+        return service.readAll(limit, offset);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class AuthorController implements AuthorCommandsController {
     }
 
     @Override
-    @GetMapping("/{id}")
+    @GetMapping("/newsId/{id}")
     public List<AuthorDTOResponse> readAuthorByNewsId(@PathVariable Long id) {
         return service.readAuthorByNewsId(id);
     }

@@ -17,8 +17,8 @@ public class TagService implements TagCommandsService {
     private TagCommands repository;
 
     @Override
-    public List<TagDTOResponse> readAll() {
-        return repository.readAll().stream().map(TagMapper.INSTANCE::modelToDto).toList();
+    public List<TagDTOResponse> readAll(int limit, int offset) {
+        return repository.readAll(limit, offset).stream().map(TagMapper.INSTANCE::modelToDto).toList();
     }
 
     @Override

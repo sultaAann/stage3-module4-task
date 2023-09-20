@@ -1,13 +1,13 @@
 package com.mjc.school.repository.impl;
 
 import com.mjc.school.repository.TagCommands;
-import com.mjc.school.repository.model.impl.News;
 import com.mjc.school.repository.model.impl.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.List;
 import java.util.Optional;
@@ -23,8 +23,16 @@ public class TagRepository implements TagCommands {
     }
 
     @Override
-    public List<Tag> readAll() {
-        return entityManager.createQuery("select a from Tag a").getResultList();
+    public List<Tag> readAll(int limit, int offset) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Tag> criteriaQuery = criteriaBuilder.createQuery(Tag.class);
+        Root<Tag> root = criteriaQuery.from(Tag.class);
+        CriteriaQuery<Tag> all = criteriaQuery.select(root);
+
+        TypedQuery<Tag> allQuery = entityManager.createQuery(all)
+                .setFirstResult(offset)
+                .setMaxResults(limit);
+        return allQuery.getResultList();
     }
 
     @Override
@@ -67,7 +75,7 @@ public class TagRepository implements TagCommands {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Tag> criteriaQuery = criteriaBuilder.createQuery(Tag.class);
         Root<Tag> tags = criteriaQuery.from(Tag.class);
-        Join<Tag, News> newsJoin = tags.join("news", JoinType.LEFT);
+        Join<Tag, Tag> newsJoin = tags.join("news", JoinType.LEFT);
         criteriaQuery.where(criteriaBuilder.equal(newsJoin.get("tag_id"), id));
         return entityManager.createQuery(criteriaQuery).getResultList();
     }

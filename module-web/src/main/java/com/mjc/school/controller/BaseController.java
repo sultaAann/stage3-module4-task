@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface BaseController<T, R, K> {
 
-    List readAll();
+    List readAll(int limit, int offset);
 
     R readById(K id);
 

@@ -23,8 +23,9 @@ public class NewsController implements NewsCommandsController {
 
     @Override
     @GetMapping("/all")
-    public List<NewsDTOResponse> readAll() {
-        return service.readAll();
+    public List<NewsDTOResponse> readAll( @RequestParam(defaultValue = "10", required = false) int limit,
+                                          @RequestParam(defaultValue = "0", required = false) int offset) {
+        return service.readAll(limit, offset);
     }
 
     @Override

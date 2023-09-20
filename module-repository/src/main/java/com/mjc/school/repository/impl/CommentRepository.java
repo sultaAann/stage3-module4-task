@@ -5,9 +5,12 @@ import com.mjc.school.repository.model.impl.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +25,16 @@ public class CommentRepository implements CommentCommands {
     }
 
     @Override
-    public List<Comment> readAll() {
-        return entityManager.createQuery("select a from Comment a").getResultList();
+    public List<Comment> readAll(int limit, int offset) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Comment> criteriaQuery = criteriaBuilder.createQuery(Comment.class);
+        Root<Comment> root = criteriaQuery.from(Comment.class);
+        CriteriaQuery<Comment> all = criteriaQuery.select(root);
+
+        TypedQuery<Comment> allQuery = entityManager.createQuery(all)
+                .setFirstResult(offset)
+                .setMaxResults(limit);
+        return allQuery.getResultList();
     }
 
     @Override
@@ -65,7 +76,7 @@ public class CommentRepository implements CommentCommands {
         return entityManager.createQuery(
                 "SELECT c FROM Comment c" +
                         "INNER JOIN news_tag n ON c.comment_id = n.news_id" +
-                        "INNER JOIN News ON news_tag.news_id = News.news_id;"
+                        "INNER JOIN Comment ON news_tag.news_id = Comment.news_id;"
         ).getResultList();
     }
 }

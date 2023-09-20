@@ -24,8 +24,9 @@ public class TagController implements TagCommandsController {
 
     @Override
     @GetMapping("/all")
-    public List<TagDTOResponse> readAll() {
-        return service.readAll();
+    public List<TagDTOResponse> readAll( @RequestParam(defaultValue = "10", required = false) int limit,
+                                         @RequestParam(defaultValue = "0", required = false) int offset) {
+        return service.readAll(limit, offset);
     }
 
     @Override
@@ -57,7 +58,7 @@ public class TagController implements TagCommandsController {
     }
 
     @Override
-    @GetMapping("/{id}")
+    @GetMapping("/newsId/{id}")
     public List<TagDTOResponse> readTagsByNewsId(@PathVariable Long id) {
         return service.readTagsByNewsId(id);
     }

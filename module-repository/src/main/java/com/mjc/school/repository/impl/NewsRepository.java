@@ -26,13 +26,15 @@ public class NewsRepository implements NewsCommands {
         this.entityManager = entityManagerFactory.createEntityManager();
     }
     @Override
-    public List<News> readAll() {
+    public List<News> readAll(int limit, int offset) {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<News> criteriaQuery = criteriaBuilder.createQuery(News.class);
         Root<News> root = criteriaQuery.from(News.class);
         CriteriaQuery<News> all = criteriaQuery.select(root);
 
-        TypedQuery<News> allQuery = entityManager.createQuery(all);
+        TypedQuery<News> allQuery = entityManager.createQuery(all)
+                .setFirstResult(offset)
+                .setMaxResults(limit);
         return allQuery.getResultList();
     }
 

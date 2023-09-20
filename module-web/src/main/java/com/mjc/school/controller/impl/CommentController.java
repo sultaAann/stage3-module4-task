@@ -23,8 +23,9 @@ public class CommentController implements CommentCommandsController {
 
     @Override
     @GetMapping("/all")
-    public List<CommentDTOResponse> readAll() {
-        return service.readAll();
+    public List<CommentDTOResponse> readAll( @RequestParam(defaultValue = "10", required = false) int limit,
+                                             @RequestParam(defaultValue = "0", required = false) int offset) {
+        return service.readAll(limit, offset);
     }
 
     @Override
@@ -56,7 +57,7 @@ public class CommentController implements CommentCommandsController {
     }
 
     @Override
-    @GetMapping("/{id}")
+    @GetMapping("/newsId/{id}")
     public List<CommentDTOResponse> readCommentsByNewsId(@PathVariable Long id) {
         return service.readCommentsByNewsId(id);
     }

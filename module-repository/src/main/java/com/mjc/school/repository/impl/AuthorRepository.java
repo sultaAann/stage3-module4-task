@@ -3,12 +3,12 @@ package com.mjc.school.repository.impl;
 
 import com.mjc.school.repository.AuthorCommands;
 import com.mjc.school.repository.model.impl.Author;
-import com.mjc.school.repository.model.impl.News;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,9 +23,18 @@ public class AuthorRepository implements AuthorCommands {
     public void setEntityManager(EntityManagerFactory entityManagerFactory) {
         this.entityManager = entityManagerFactory.createEntityManager();
     }
+
     @Override
-    public List<Author> readAll() {
-        return entityManager.createQuery("select a from Author a").getResultList();
+    public List<Author> readAll(int limit, int offset) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Author> criteriaQuery = criteriaBuilder.createQuery(Author.class);
+        Root<Author> root = criteriaQuery.from(Author.class);
+        CriteriaQuery<Author> all = criteriaQuery.select(root);
+
+        TypedQuery<Author> allQuery = entityManager.createQuery(all)
+                .setFirstResult(offset)
+                .setMaxResults(limit);
+        return allQuery.getResultList();
     }
 
     @Override
@@ -69,7 +78,7 @@ public class AuthorRepository implements AuthorCommands {
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Author> criteriaQuery = criteriaBuilder.createQuery(Author.class);
         Root<Author> tags = criteriaQuery.from(Author.class);
-        Join<Author, News> newsJoin = tags.join("news", JoinType.LEFT);
+        Join<Author, Author> newsJoin = tags.join("news", JoinType.LEFT);
         criteriaQuery.where(criteriaBuilder.equal(newsJoin.get("author_id"), id));
         return entityManager.createQuery(criteriaQuery).getResultList();
     }

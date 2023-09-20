@@ -17,8 +17,8 @@ public class AuthorService implements AuthorCommandsService {
     private AuthorCommands authorCommands;
 
     @Override
-    public List<AuthorDTOResponse> readAll() {
-        return authorCommands.readAll().stream().map(AuthorMapper.INSTANCE::modelToDto).toList();
+    public List<AuthorDTOResponse> readAll(int limit, int offset) {
+        return authorCommands.readAll(limit, offset).stream().map(AuthorMapper.INSTANCE::modelToDto).toList();
     }
 
     @Override

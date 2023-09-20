@@ -17,8 +17,8 @@ public class CommentService implements CommentCommandsService {
     private CommentCommands repository;
 
     @Override
-    public List<CommentDTOResponse> readAll() {
-        return repository.readAll().stream().map(CommentMapper.INSTANCE::modelToDto).toList();
+    public List<CommentDTOResponse> readAll(int limit, int offset) {
+        return repository.readAll(limit, offset).stream().map(CommentMapper.INSTANCE::modelToDto).toList();
     }
 
     @Override

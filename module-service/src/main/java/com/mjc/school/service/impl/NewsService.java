@@ -20,8 +20,8 @@ public class NewsService implements NewsCommandsService {
     private NewsCommands repository;
 
     @Override
-    public List<NewsDTOResponse> readAll() {
-        return repository.readAll().stream().map(NewsMapper.INSTANCE::modelToDto).toList();
+    public List<NewsDTOResponse> readAll(int limit, int offset) {
+        return repository.readAll(limit, offset).stream().map(NewsMapper.INSTANCE::modelToDto).toList();
     }
 
     @Override
