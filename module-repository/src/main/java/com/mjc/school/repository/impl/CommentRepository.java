@@ -74,9 +74,9 @@ public class CommentRepository implements CommentCommands {
     @Override
     public List<Comment> readCommentsByNewsId(Long id) {
         return entityManager.createQuery(
-                "SELECT c FROM Comment c" +
-                        "INNER JOIN news_tag n ON c.comment_id = n.news_id" +
-                        "INNER JOIN Comment ON news_tag.news_id = Comment.news_id;"
-        ).getResultList();
+                "SELECT c FROM Comment c WHERE c.newsId = :id"
+                )
+                .setParameter("id", id)
+                .getResultList();
     }
 }
