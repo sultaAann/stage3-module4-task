@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -36,13 +37,18 @@ public class AuthorController implements AuthorCommandsController {
     @Override
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public AuthorDTOResponse create(@RequestBody AuthorDTORequest createRequest) {
+    public AuthorDTOResponse create(
+            @RequestBody @Valid AuthorDTORequest createRequest
+    ) {
         return service.create(createRequest);
     }
 
     @Override
     @PutMapping("/{id}")
-    public AuthorDTOResponse update(@PathVariable Long id, @RequestBody AuthorDTORequest updateRequest) {
+    public AuthorDTOResponse update(
+            @PathVariable Long id,
+            @RequestBody @Valid AuthorDTORequest updateRequest
+    ) {
         return service.update(id, updateRequest);
     }
 

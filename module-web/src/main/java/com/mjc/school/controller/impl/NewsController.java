@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -37,13 +38,16 @@ public class NewsController implements NewsCommandsController {
     @Override
     @PostMapping()
     @ResponseStatus(value = HttpStatus.CREATED)
-    public NewsDTOResponse create(@RequestBody NewsDTORequest createRequest) {
+    public NewsDTOResponse create(@RequestBody @Valid NewsDTORequest createRequest) {
         return service.create(createRequest);
     }
 
     @Override
     @PutMapping("/{id}")
-    public NewsDTOResponse update(@PathVariable Long id, @RequestBody NewsDTORequest updateRequest) {
+    public NewsDTOResponse update(
+            @PathVariable Long id,
+            @RequestBody @Valid NewsDTORequest updateRequest
+    ) {
         return service.update(id, updateRequest);
     }
 

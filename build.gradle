@@ -37,6 +37,8 @@ subprojects {
         testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$jupiterVersion"
         testImplementation "com.tngtech.archunit:archunit-junit5:$archUnitVersion"
 
+        implementation 'javax.validation:validation-api:2.0.1.Final'
+
         annotationProcessor "org.mapstruct:mapstruct-processor:$mapstructVersion"
         implementation "org.mapstruct:mapstruct:$mapstructVersion"
     }

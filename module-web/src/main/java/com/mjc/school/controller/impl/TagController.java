@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -38,13 +39,18 @@ public class TagController implements TagCommandsController {
     @Override
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public TagDTOResponse create(@RequestBody TagDTORequest createRequest) {
+    public TagDTOResponse create(
+            @RequestBody @Valid TagDTORequest createRequest
+    ) {
         return service.create(createRequest);
     }
 
     @Override
     @PutMapping("/{id}")
-    public TagDTOResponse update(@PathVariable Long id, @RequestBody TagDTORequest updateRequest) {
+    public TagDTOResponse update(
+            @PathVariable Long id,
+            @RequestBody @Valid TagDTORequest updateRequest
+    ) {
         return service.update(id, updateRequest);
     }
 

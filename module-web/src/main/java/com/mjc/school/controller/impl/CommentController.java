@@ -37,13 +37,18 @@ public class CommentController implements CommentCommandsController {
     @Override
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
-    public CommentDTOResponse create(@RequestBody CommentDTORequest createRequest) {
+    public CommentDTOResponse create(
+            @RequestBody CommentDTORequest createRequest
+    ) {
         return service.create(createRequest);
     }
 
     @Override
     @PutMapping("/{id}")
-    public CommentDTOResponse update(@PathVariable Long id, @RequestBody CommentDTORequest updateRequest) {
+    public CommentDTOResponse update(
+            @PathVariable Long id,
+            @RequestBody CommentDTORequest updateRequest
+    ) {
         return service.update(id, updateRequest);
     }
 
