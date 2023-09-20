@@ -57,7 +57,8 @@ public class NewsController implements NewsCommandsController {
     }
 
     @Override
-    public List<NewsDTOResponse> readBySearchParams(NewsQueryParams queryParams) {
+    @GetMapping()
+    public List<NewsDTOResponse> readBySearchParams(@RequestBody NewsQueryParams queryParams) {
         return service.readBySearchParams(queryParams);
     }
 
