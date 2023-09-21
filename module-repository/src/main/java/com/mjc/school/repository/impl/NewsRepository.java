@@ -2,6 +2,7 @@ package com.mjc.school.repository.impl;
 
 import com.mjc.school.repository.NewsCommands;
 import com.mjc.school.repository.model.impl.Author;
+import com.mjc.school.repository.model.impl.Comment;
 import com.mjc.school.repository.model.impl.News;
 import com.mjc.school.repository.model.impl.Tag;
 import com.mjc.school.repository.query.NewsSearchQueryParams;
@@ -54,19 +55,14 @@ public class NewsRepository implements NewsCommands {
 
     @Override
     public News update(News model) {
-        entityManager.getTransaction().begin();
-        model.setLastUpdatedDate(LocalDateTime.now());
-        News res = entityManager.merge(model);
-        entityManager.getTransaction().commit();
-        return res;
+        return entityManager.merge(model);
     }
 
     @Override
     public boolean deleteById(Long id) {
         if (existById(id)) {
-            entityManager.getTransaction().begin();
-            entityManager.remove(id);
-            entityManager.getTransaction().commit();
+            News news = entityManager.find(News.class, id);
+            entityManager.remove(news);
             return true;
         } else {
             return false;

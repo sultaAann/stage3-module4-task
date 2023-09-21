@@ -50,19 +50,14 @@ public class TagRepository implements TagCommands {
 
     @Override
     public Tag update(Tag model) {
-        entityManager.getTransaction().begin();
-        Tag response = entityManager.merge(model);
-        entityManager.getTransaction().commit();
-        return response;
+        return entityManager.merge(model);
     }
 
     @Override
     public boolean deleteById(Long id) {
         if (existById(id)) {
             Tag tag = entityManager.find(Tag.class, id);
-            entityManager.getTransaction().begin();
             entityManager.remove(tag);
-            entityManager.getTransaction().commit();
             return true;
         } else {
             return false;

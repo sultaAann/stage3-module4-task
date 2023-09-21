@@ -54,19 +54,14 @@ public class AuthorRepository implements AuthorCommands {
     @Override
     public Author update(Author model) {
         model.setLastUpdatedDate(LocalDateTime.now());
-        entityManager.getTransaction().begin();
-        Author res = entityManager.merge(model);
-        entityManager.getTransaction().commit();
-        return res;
+        return entityManager.merge(model);
     }
 
     @Override
     public boolean deleteById(Long id) {
         if (existById(id)) {
             Author author = entityManager.find(Author.class, id);
-            entityManager.getTransaction().begin();
             entityManager.remove(author);
-            entityManager.getTransaction().commit();
             return true;
         } else {
             return false;
