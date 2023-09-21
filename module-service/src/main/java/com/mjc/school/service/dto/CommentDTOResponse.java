@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 public record CommentDTOResponse(
         Long id,
         String content,
-        LocalDateTime createdDate,
-        LocalDateTime lastUpdatedDate
+        Long newsId
 ) {
 }

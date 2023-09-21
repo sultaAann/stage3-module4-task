@@ -44,20 +44,27 @@ public class CommentRepository implements CommentCommands {
 
     @Override
     public Comment create(Comment model) {
+        entityManager.getTransaction().begin();
         entityManager.persist(model);
+        entityManager.getTransaction().commit();
         return model;
     }
 
     @Override
     public Comment update(Comment model) {
-        return entityManager.merge(model);
+        entityManager.getTransaction().begin();
+        Comment res = entityManager.merge(model);
+        entityManager.getTransaction().commit();
+        return res;
     }
 
     @Override
     public boolean deleteById(Long id) {
         if (existById(id)) {
             Comment tag = entityManager.find(Comment.class, id);
+            entityManager.getTransaction().begin();
             entityManager.remove(tag);
+            entityManager.getTransaction().commit();
             return true;
         } else {
             return false;

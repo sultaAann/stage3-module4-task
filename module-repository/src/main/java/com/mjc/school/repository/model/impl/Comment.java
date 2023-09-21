@@ -26,6 +26,14 @@ public class Comment implements BaseEntity<Long> {
     @JoinColumn(name = "news_id")
     private News newsId;
 
+    public News getNewsId() {
+        return newsId;
+    }
+
+    public void setNewsId(News newsId) {
+        this.newsId = newsId;
+    }
+
     public String getContent() {
         return content;
     }

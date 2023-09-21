@@ -9,6 +9,7 @@ import com.mjc.school.service.mapper.AuthorMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -32,6 +33,7 @@ public class AuthorService implements AuthorCommandsService {
     @Override
     public AuthorDTOResponse create(AuthorDTORequest createRequest) {
         Author model = AuthorMapper.INSTANCE.dtoToModel(createRequest);
+        model.setCreatedDate(LocalDateTime.now());
         authorCommands.create(model);
         return AuthorMapper.INSTANCE.modelToDto(model);
     }
@@ -39,6 +41,7 @@ public class AuthorService implements AuthorCommandsService {
     @Override
     public AuthorDTOResponse update(Long id, AuthorDTORequest updateRequest) {
         Author model = AuthorMapper.INSTANCE.dtoToModel(updateRequest);
+        model.setLastUpdatedDate(LocalDateTime.now());
         model.setId(id);
         authorCommands.update(model);
         return AuthorMapper.INSTANCE.modelToDto(model);

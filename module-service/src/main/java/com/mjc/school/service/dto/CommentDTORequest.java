@@ -9,9 +9,9 @@ import javax.validation.constraints.Size;
 @Component
 @Scope("prototype")
 public record CommentDTORequest(
-        @Positive
-        Long id,
         @Size(min = 5, max = 255, message = "Comment can not be less than 5 and more than 255 symbols.")
-        String content
+        String content,
+        @Positive
+        Long newsId
 ) {
 }

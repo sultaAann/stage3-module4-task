@@ -12,6 +12,7 @@ import com.mjc.school.service.query.NewsQueryParams;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -39,6 +40,7 @@ public class NewsService implements NewsCommandsService {
         Author author = new Author();
         author.setId(createRequest.authorId());
         model.setAuthorId(author);
+        model.setCreatedDate(LocalDateTime.now());
 
         repository.create(model);
         return NewsMapper.INSTANCE.modelToDto(model);
@@ -52,6 +54,7 @@ public class NewsService implements NewsCommandsService {
         Author author = new Author();
         author.setId(updateRequest.authorId());
         model.setAuthorId(author);
+        model.setLastUpdatedDate(LocalDateTime.now());
 
         repository.update(model);
         return NewsMapper.INSTANCE.modelToDto(model);

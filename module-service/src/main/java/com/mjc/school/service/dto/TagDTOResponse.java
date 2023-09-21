@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 @Scope("prototype")
 public record TagDTOResponse(
         Long id,
-        String name,
-        LocalDateTime createdDate,
-        LocalDateTime lastUpdatedDate
+        String name
 ) {
 }
